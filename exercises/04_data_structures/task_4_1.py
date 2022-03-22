@@ -16,3 +16,11 @@
 """
 
 nat = "ip nat inside source list ACL interface FastEthernet0/1 overload"
+
+
+a = nat.split()
+a[7] = 'GigabitEthernet0/1'
+stdout = '{} {} {} {} {} {} {} {} {}'.format(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8])
+print(stdout)  
+
+

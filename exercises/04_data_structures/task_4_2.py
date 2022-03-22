@@ -15,3 +15,7 @@
 """
 
 mac = "AAAA:BBBB:CCCC"
+
+a = mac.split(":")
+stdout = "{}.{}.{}".format(a[0], a[1], a[2])
+print(stdout)
