@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-Задание 4.7
+Задание 4.6
 
-Преобразовать MAC-адрес в строке mac в двоичную строку такого вида:
-'101010101010101010111011101110111100110011001100'
-
-Полученную новую строку вывести на стандартный поток вывода (stdout) с помощью print.
+Обработать строку ospf_route и вывести информацию на стандартный поток вывода в виде:
+Prefix                10.0.24.0/24
+AD/Metric             110/41
+Next-Hop              10.0.13.3
+Last update           3d18h
+Outbound Interface    FastEthernet0/0
 
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 
@@ -15,11 +17,14 @@
 проверять результат.
 """
 
-mac = "AAAA:BBBB:CCCC"
+ospf_route = "      10.0.24.0/24 [110/41] via 10.0.13.3, 3d18h, FastEthernet0/0"
 
-a= mac.split(":")
-q = bin(int(a[0] + a[1] + a[2], 16))
- 
+x = ospf_route.split()
+a = {"Prefix" : x[0],
+     "AD/Metric" : x[1],
+     "Next-Hop" : x[2],
+     "Last update" : x[3],
+     "Outbound Interface" : x[4]}
 
-result =  q.split('0b')[1]
-print(result)
+re
+print(a['Prefix'])

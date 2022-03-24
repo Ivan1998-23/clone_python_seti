@@ -30,12 +30,17 @@ a = {"Prefix" : q[0],
      "Last update" : q[4],
      "Outbound Interface" : q[5]}
 
-result =  '''Prefix			{0:28}
-AD/Metric		{1:28}
-Next-Hop		{2:28}
-Last update		{3:28}
-Outbound Interface	{4:28}'''
+"""
+result =  '''
+Prefix			{0:15}
+AD/Metric		{1:15}
+Next-Hop		{2:15}
+Last update		{3:<15}
+Outbound Interface	{4:<15}
+'''
+"""
+#print(result.format(a["Prefix"], a["AD/Metric"], a["Next-Hop"], a["Last update"], a["Outbound Interface"]))
 
-print(result.format(str(a["Prefix"]), str(a["AD/Metric"]), str(a["Next-Hop"]), str(a["Last update"]), str(a["Outbound Interface"])))
-#print("Prefix {0:28}".format(a["Prefix"]))
-#print("AD/Metric {0:28}".format(a["AD/Metric"]))
+
+print(''' '''
+)

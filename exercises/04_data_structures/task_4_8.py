@@ -26,3 +26,13 @@
 """
 
 ip = "192.168.3.1"
+
+a = ip.split(".")
+s0 = int(a[0])
+s1 = int(a[1])
+s2 = int(a[2])
+s3 = int(a[3])
+result = "{0:10}{1:10}{2:10}{3:10}".format(a[0], a[1], a[2], a[3])
+#print("{0:15}{1:15}{2:15}{3:15}".format(a[0], a[1], a[2], a[3]))
+print(result)
+print("{0:08b}  {1:08b}  {2:08b}  {3:08b}".format(s0, s1, s2, s3))
