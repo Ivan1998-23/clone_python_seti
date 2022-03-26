@@ -49,3 +49,25 @@ bin_ip = "00001010000000010000000111000011"
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 
 """
+
+x  = input().split('/')
+i = x[0].split('.')
+
+mac = int(x[1])
+macb = "1" * mac + "0" * (32 - mac)
+
+
+#ipb = bin(int(i[0])).split('0b')[1] + bin(int(i[1])).split('0b')[1] + bin(int(i[2])).split('0b')[1] + bin(int(i[3])).split('0b')[1]
+ipb = "{0:08b}{1:08b}{2:08b}{3:08b}".format(int(i[0]), int(i[1]), int(i[2]), int(i[3]))
+
+setb = ipb[0:mac] + "0" * (32 - mac)
+setip = int(setb[24:32],2)
+#print("setb", setb)
+
+print("Network: \n{0:<8}  {1:<8}  {2:<8}  {3:<8}".format(int(setb[0:8],2), int(setb[8:16],2), int(setb[16:24],2), int(setb[24:32],2)))   
+print("{0:8}  {1:8}  {2:8}  {3:8}".format(setb[0:8], setb[8:16], setb[16:24], setb[24:32]))
+print("Mask: \n/{0}\n{1:<8}  {2:<8}  {3:<8}  {4:<8}".format(mac, int(macb[0:8],2), int(macb[8:16],2), int(macb[16:24],2), int(macb[24:32],2)))
+print("{0:8}  {1:8}  {2:8}  {3:8}".format(macb[0:8], macb[8:16], macb[16:24], macb[24:32]))
+
+
+
