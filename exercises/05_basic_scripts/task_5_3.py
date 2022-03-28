@@ -44,7 +44,7 @@ $ python task_5_3.py
 Введите тип и номер интерфейса: Fa0/7
 Введите номер влан(ов): 2,3,4,5
 
-interface Fa0/7
+winterface Fa0/7
 switchport trunk encapsulation dot1q
 switchport mode trunk
 switchport trunk allowed vlan 2,3,4,5
@@ -63,9 +63,38 @@ trunk_template = [
     "switchport mode trunk",
     "switchport trunk allowed vlan {}",
 ]
- 
-ork = dict(access_template)
-at = input("Введите режим работы интерфейса (access/trunk): ")
-interface = input("Введите тип и номер интерфейса: ")
-vlan =  input("Введите номер влан(ов): ")
 
+ork = {'access' : access_template,
+	'trunk' : trunk_template}
+
+at = 'trunk' #input("Введите режим работы интерфейса (access/trunk): ")
+interface = 'as' # input("Введите тип и номер интерфейса: ")
+vlan =  '20' #input("Введите номер влан(ов): ")
+print()
+print("interface", interface)
+
+
+new = ork[at].copy()
+print(new)
+print(list(new[0:len(new)]))
+'''
+print(new[0])
+print(new[1].format(vlan))
+print(new[2])
+print(new[3])
+print(new[4])
+print()
+print(new[0])
+print(new[1])
+print(new[2].format(vlan))
+
+print(ork.get(at)[0])
+print(ork.get(at)[1].format(vlan))
+print(ork.get(at)[2])
+print(ork.get(at)[3])
+print(ork.get(at)[4])
+print()
+print(ork.get(at)[0])
+print(ork.get(at)[1])
+print(ork.get(at)[2].format(vlan))
+'''
