@@ -12,3 +12,15 @@
 
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 """
+a = input()
+b = int(a.split('.')[0])
+if a == '0.0.0.0':
+    print('unassigned')
+elif a == '255.255.255.255':
+    print('local broadcast')
+elif b > 0 and b < 224:
+    print('unicast')
+elif b > 223 and b < 240:
+    print('multicast')
+else:
+    print('unused')

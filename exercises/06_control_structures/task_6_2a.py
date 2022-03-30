@@ -17,3 +17,28 @@
 
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 """
+
+try:
+    a = input()
+    b1 = int(a.split('.')[0])
+    b2 = int(a.split('.')[1])
+    b3 = int(a.split('.')[2])
+    b4 = int(a.split('.')[3])
+    
+    if b1 >= 0 and b1 <256 and b2 >= 0 and b2 <256 and b3 >= 0 and b3 <256 and b4 >= 0 and b4 <256 and (len(a.split('.')) == 4):
+        if a == '0.0.0.0':
+            print('unassigned')
+        elif a == '255.255.255.255':
+            print('local broadcast')
+        elif b1 > 0 and b1 < 224:
+            print('unicast')
+        elif b1 > 223 and b1 < 240:
+            print('multicast')
+        else:
+            print('unused')
+    else:
+        print('Неправильный IP-адрес')
+except (ValueError, IndexError):
+    print('Неправильный IP-адрес')
+    
+        
