@@ -39,3 +39,21 @@ interface Ethernet0/3
 ...
 
 """
+with open('config_sw1.txt', 'r') as f:
+    for line in f:
+        if '!' in line :
+            pass
+        else:
+            print(line.strip('\n'))
+
+
+
+
+
+
+
+
+
+
+
+
