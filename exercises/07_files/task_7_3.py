@@ -20,3 +20,9 @@
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 
 """
+with open('CAM_table.txt', 'r') as f1:
+    for lin in f1:
+        if '/' in lin:
+            a = lin.split()
+            print("{:9}{:20}{:15}".format(a[0], a[1], a[3]))
+            #print(lin[0].strip('\n'))
