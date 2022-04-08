@@ -59,9 +59,8 @@ access_mode_template = [
 access_config = {"FastEthernet0/12": 10, "FastEthernet0/14": 11, "FastEthernet0/16": 17}
 
 access_config_2 = {
-    "FastEthernet0/03": 100,
-    "FastEthernet0/07": 101,
-    "FastEthernet0/09": 107,
+    "FastEthernet0/1": 101,
+    "FastEthernet0/4": 121,
 }
 
 
@@ -75,3 +74,32 @@ def generate_access_config(intf_vlan_mapping, access_template):
 
     Возвращает список всех портов в режиме access с конфигурацией на основе шаблона
     """
+    result = []
+    for intf, vlan in intf_vlan_mapping.items():
+        result.append(f'interface {intf}')
+        for line in access_mode_template:
+            if 'mode' in line:
+                result.append(access_mode_template[0].strip())
+            elif 'vlan' in line:
+                result.append(f'{access_mode_template[1]} {vlan}'.strip())
+            elif 'nonegotiate' in line and vlan != 101  and vlan != 121 :
+                result.append(access_mode_template[2].strip())
+            elif 'portfast' in line and vlan != 101  and vlan != 121:
+                result.append(access_mode_template[3].strip())
+            elif 'enable' in line and vlan != 101  and vlan != 121:
+                result.append(access_mode_template[4].strip())
+    return result
+    
+#for line in  generate_access_config(access_config_2, access_mode_template):
+print(generate_access_config(access_config, access_mode_template))
+
+
+
+
+
+
+
+
+
+
+
