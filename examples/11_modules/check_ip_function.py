@@ -10,7 +10,7 @@ def check_ip(ip):
 
 
 if __name__ == '__main__':
-    ip1 = '10.1.1.1'
+    zip1 = '10.1.1.1'
     ip2 = '10.1.1'
 
     print('Проверка IP...')
