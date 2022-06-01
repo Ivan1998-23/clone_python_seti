@@ -36,7 +36,28 @@ R6           Fa 0/2          143           R S I           2811       Fa 0/0
 
 
 def parse_cdp_neighbors(command_output):
-    
+    main_sw = ''
+    main_dict = {}
+    b = False
+    for string in command_output.split('\n'):
+        if len(string) > 1:                       
+            if '>' in string:
+                main_sw = string.split('>')[0]
+                #print(list_sw_in)
+            elif 'D' in string:
+                b = True 
+            elif b == True:
+                R = string.split()[0]
+                Fas_in = string.split()[1] + string.split()[2]
+                Fas_out = string.split()[-2] + string.split()[-1]
+                
+                list_sw_in = (main_sw, Fas_in)
+                list_sw_out = (R, Fas_out)
+                main_dict[list_sw_in] = list_sw_out
+    return main_dict
+            
+            
+            
     """
     Тут мы передаем вывод команды одной строкой потому что именно в таком виде будет
     получен вывод команды с оборудования. Принимая как аргумент вывод команды,
