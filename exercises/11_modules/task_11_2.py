@@ -46,5 +46,3 @@ def create_network_map(filenames):
 
 if __name__ == "__main__":
     print(create_network_map(infiles))
-    #with open("sh_cdp_n_sw1.txt") as f:
-    #    print(parse_cdp_neighbors(f.read()))

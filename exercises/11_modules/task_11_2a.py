@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from draw_network_graph import *
+from task_11_2 import *
 """
 Задание 11.2a
 
@@ -80,3 +82,29 @@ infiles = [
     "sh_cdp_n_r2.txt",
     "sh_cdp_n_r3.txt",
 ]
+
+
+topology = create_network_map(infiles) 
+
+
+def unique_network_map(topology_dict):
+    del_key = []
+    for a, b in topology_dict.items():
+        for y, x in topology_dict.items():
+            if a == x and b == y and (y  not in del_key):
+                del_key.append(a) 
+                
+    for i in range(len(del_key)):
+        _ = topology_dict.pop(del_key[i])
+    return topology_dict
+    
+    
+    
+if __name__ == "__main__" :
+    draw_topology(unique_network_map(topology))
+    
+    
+    
+    
+    
+    
