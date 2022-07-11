@@ -34,3 +34,61 @@
  '172.21.41.129', '172.21.41.130', '172.21.41.131', '172.21.41.132']
 
 """
+import ipaddress
+from tabulate import tabulate
+
+trial = ['8.8.4.4', '1.1.1.1-3', '172.21.41.128-172.21.41.139']
+
+
+def convert_ranges_to_ip_list(list_ip):
+    result = []
+    for i in list_ip:
+        
+        if '-' in i:
+            
+            l1 = int(i.split('-')[0].split('.')[3])
+            p = i.split('-')[1]
+            
+            if '.' not  in p:
+                l2 = int(p)
+                ip4 = ipaddress.ip_address(i.split('-')[0])
+                result.append(str(ip4))
+                for a in range(l1,l2 ):
+                    ip4 = ip4 + 1
+                    result.append(str(ip4))      
+            else:
+                l2 = int(i.split('-')[1].split('.')[3])
+                ip4 = ipaddress.ip_address(i.split('-')[0])
+                result.append(str(ip4))
+                for a in range(l1,l2 ):
+                    ip4 = ip4 + 1
+                    result.append(str(ip4))
+                
+        else:
+            result.append(i)
+                
+    return result
+        
+        
+if __name__ == '__main__':
+    print(convert_ranges_to_ip_list(trial))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
