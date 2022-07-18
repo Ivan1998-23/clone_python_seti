@@ -48,6 +48,7 @@ xconnect logging redundancy
 !
 !
 interface Loopback0
+
  ip address 10.1.1.1 255.255.255.255
 !
 interface Tunnel0
