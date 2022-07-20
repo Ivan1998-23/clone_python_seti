@@ -42,10 +42,50 @@
 
 Кроме того, создан список заголовков (headers), который должен быть записан в CSV.
 """
-
+import re
 import glob
+import csv
 
 sh_version_files = glob.glob("sh_vers*")
-# print(sh_version_files)
+#print(sh_version_files)
 
 headers = ["hostname", "ios", "image", "uptime"]
+
+def parse_sh_version(list_version):
+    ios = re.search(r'.*\s+Version\s+(\S+),.+', list_version).groups()[0]
+    image = re.search(r'System image file is "(\S+)"', list_version).groups()[0]
+    uptime = re.search(r'router uptime is (\S+\s+\S+\s+\S+\s+\S+\s+\S+\s+\S+)', list_version).groups()[0]
+    return (ios, image, uptime)
+
+
+
+def write_inventory_to_csv(data_filenames, csv_filename):
+    list_csv = []
+    with open(csv_filename, 'w') as f2:
+        writer = csv.writer(f2)
+        writer.writerow(headers)
+        
+        for file_name in data_filenames:
+            name_f = re.search(r".+_(\S+).txt", file_name)
+            if name_f:
+                name_f = name_f.groups()[0]
+                
+            with open(file_name, 'r') as f1:            
+                n = [name_f]
+                n.extend(list(parse_sh_version(f1.read())))
+                list_csv.append(n)
+                #print(list_csv, end='\n\n')
+                
+        for row in list_csv:
+            writer.writerow(row)
+            
+    
+    
+
+if __name__ == '__main__':
+    write_inventory_to_csv(sh_version_files, 'routers_inventory.csv')
+
+
+
+
+
