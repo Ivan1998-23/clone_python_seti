@@ -9,7 +9,7 @@
 на основании вывода команды описание для интерфейсов.
 
 Например, если у R1 такой вывод команды:
-R1>show cdp neighbors
+R1>show cdp neighborsgit a
 Capability Codes: R - Router, T - Trans Bridge, B - Source Route Bridge
                   S - Switch, H - Host, I - IGMP, r - Repeater
 
