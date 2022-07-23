@@ -31,9 +31,11 @@ name_file = 'sh_cdp_n_sw1.txt'
 
 def parse_sh_cdp_neighbors(list_file):
     
-    name_r = re.search(r'(\S+)[#>].+', list_file).groups()[0]
+    name_r = re.search(r'(\S+)[#>].+', list_file)
+    if name_r:
+        name_r = name_r.groups()[0]
     
-    regex = r'(\S+)\s+(\S+\s+\d+/\d+)\s+\S+\s+\S\s+\S\s+\S+\s+\S+\s+(\S+\s+\S+)'    
+    regex = r'(\S+)\s+(\S+\s+\d+/\d+)\s+\S+\s+.+\S+\s+\S+\s+(\S+\s+\d+/\d+)\n'    
     result = re.finditer(regex, list_file)
     
     groups =[]
