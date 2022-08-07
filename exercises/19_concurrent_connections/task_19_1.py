@@ -23,3 +23,45 @@
 а затем запустить эту функцию в разных потоках для разных
 IP-адресов с помощью concurrent.futures (это надо сделать в функции ping_ip_addresses).
 """
+import yaml
+import subprocess
+from concurrent.futures import ThreadPoolExecutor
+
+
+ip_list = ['192.168.100.1', '192.168.1.1', '192.168.100.2', '192.168.100.3','192.168.100.4']
+limit = 2
+
+def ping_ip_addresses(ip_list, limit=3):
+    list_ok_ip = []
+    list_on_ip = []
+    
+    with ThreadPoolExecutor(max_workers = limit) as executor:
+        result = executor.map(ping_one_host, ip_list)
+        
+    for ip, log in result:
+        if log:
+            list_ok_ip.append(ip)
+        else:
+            list_on_ip.append(ip)
+    return (list_ok_ip, list_on_ip)
+
+def ping_one_host(ip):
+    reply = subprocess.run(['ping', '-c', '1', '-n', ip], stdout = subprocess.PIPE)
+    if reply.returncode == 0:
+        return ip, True
+    else:
+        return ip, False
+
+
+if __name__ == '__main__':
+    print(ping_ip_addresses(ip_list))
+        
+
+
+
+
+
+
+
+
+
