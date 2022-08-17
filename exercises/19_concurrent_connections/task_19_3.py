@@ -47,3 +47,40 @@ commands = {
     "192.168.100.1": "sh ip int br",
     "192.168.100.2": "sh int desc",
 }
+
+from datetime import datetime
+import time
+from itertools import repeat
+from concurrent.futures import ThreadPoolExecutor
+import logging
+import netmiko
+import yaml
+import re
+from pprint import pprint
+from netmiko import ConnectHandler, NetMikoAuthenticationException
+
+def send_command_to_devices(devices, commands_dict, filename, limit = 3):
+
+    with ThreadPoolExecutor(max_workers = limit) as executer,  open(filename, 'w') as f1:
+        future_list= []
+        for device in devices:
+            future = executer.submit(sh_comm, device, commands_dict)
+            future_list.append(future)
+        
+        for i in future_list:
+            print(f'''{i.result()[0]}{i.result()[1]}\n{i.result()[2]}''', file=f1)
+        
+    
+    
+def sh_comm(devices, command):
+    with netmiko.ConnectHandler(**devices) as ssh:
+        r1 = ssh.enable()
+        match = re.search(r'.+\n.+\n(\S+[#>$])', r1).groups()[0]
+        
+        result = ssh.send_command(command.get(devices.get('host')))
+        return match, command.get(devices.get('host')), result
+
+if __name__ == '__main__':
+    with open('devices.yaml') as f:
+        devices = yaml.safe_load(f)
+    send_command_to_devices(devices, commands, 'output.txt', limit=3)

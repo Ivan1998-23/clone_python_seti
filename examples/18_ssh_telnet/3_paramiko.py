@@ -51,7 +51,7 @@ def send_show_command(
 
 
 if __name__ == "__main__":
-    devices = ["192.168.100.1", "192.168.100.2", "192.168.100.3"]
+    devices = ["192.168.100.1"]#, "192.168.100.2", "192.168.100.3"]
     commands = ["sh clock", "sh arp"]
     result = send_show_command("192.168.100.1", "cisco", "cisco", "cisco", commands)
     pprint(result, width=120)

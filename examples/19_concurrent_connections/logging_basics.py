@@ -30,4 +30,4 @@ if __name__ == "__main__":
     with open('devices.yaml') as f:
         devices = yaml.safe_load(f)
     for dev in devices:
-        print(send_show(dev, 'sh clock'))
+        print(send_show(dev, 'sh ip int br'))

@@ -105,3 +105,64 @@ R3#
 
 Для выполнения задания можно создавать любые дополнительные функции.
 """
+import yaml
+from task_19_2 import sh_ip_int_bt
+from task_19_3a import sh_comm
+import netmiko
+from itertools import repeat
+from concurrent.futures import ThreadPoolExecutor
+import re
+from netmiko import (ConnectHandler, NetmikoAuthenticationException,
+                     NetmikoTimeoutException)
+
+limit = 3 
+
+def send_commands_to_devices(devices, filenane, **kwargs):
+    try:
+        config = kwargs.get('config')
+        show = kwargs.get('show')
+        limit = kwargs.get('limit')
+        
+        if (show != None) and (config  != None):
+            print('ValueError')
+            raise ValueError()
+        else:
+            with ThreadPoolExecutor(max_workers = limit) as executer, open(filename, 'w') as f1:
+                future_list = []
+                for device in devices:
+                    if show != None:
+                        future = executer.submit(sh_ip_int_bt, device, show)
+                        future_list.append(future)
+                    else:
+                        future = executer.submit(conf_com, device, config)
+                        future_list.append(future)
+                        
+                if show == None:
+                    for i in future_list:
+                        print(i.result(), file=f1)
+                else:
+                    for i in future_list:
+                        for j in i.result():
+                            print(str(j), file=f1)
+                
+                
+    except ValueError as r:
+        print(r)
+    
+def conf_com(devices, command):
+    with netmiko.ConnectHandler(**devices) as ssh:
+        r1 = ssh.enable()
+        match = re.search(r'.+\n.+\n(\S+[#>$])', r1).groups()[0]
+        result = ssh.send_config_set(command)
+        return result
+
+
+if __name__ == '__main__':
+    with open('devices.yaml') as f:
+        devices = yaml.safe_load(f)
+    filename = 'output.txt'
+    show = 'sh ip int br'
+    config = ['router ospf 55', 'network 0.0.0.0 255.255.255.255 area 0']
+    limit =3
+    send_commands_to_devices(devices, 'output.txt', show, limit=3)
+    
