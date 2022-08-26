@@ -37,7 +37,13 @@
 интерфейсов, но при этом не проверяет настроенные номера тунелей и другие команды.
 Они должны быть, но тест упрощен, чтобы было больше свободы выполнения.
 """
-
+from task_20_1 import generate_config
+import yaml
+from netmiko import (ConnectHandler, NetmikoAuthenticationException, NetmikoTimeoutException)
+import netmiko
+import re
+import pexpect
+from pprint import pprint
 data = {
     "tun_num": None,
     "wan_ip_1": "192.168.100.1",
@@ -45,3 +51,119 @@ data = {
     "tun_ip_1": "10.0.1.1 255.255.255.252",
     "tun_ip_2": "10.0.1.2 255.255.255.252",
 }
+data2 = {
+        "tun_num": None,
+        "wan_ip_1": "80.241.1.1",
+        "wan_ip_2": "90.18.10.2",
+        "tun_ip_1": "10.255.1.1 255.255.255.252",
+        "tun_ip_2": "10.255.1.2 255.255.255.252",
+    }
+src_template = 'templates/gre_ipsec_vpn_1.txt'
+dst_template = 'templates/gre_ipsec_vpn_2.txt'
+
+
+def configure_vpn(src_device_params, dst_device_params, src_template, dst_template, vpn_data_dict):
+    
+    tunel_src = set_tunnel(src_device_params)
+    tunel_dst = set_tunnel(dst_device_params)
+    
+    l = True
+    iterator = 0
+    while l:
+        if (iterator  not in tunel_src) and (iterator  not in tunel_dst):
+            l = False
+        else:
+            iterator += 1
+    vpn_data_dict["tun_num"] = iterator
+    
+    output_list_1 = conf_src = generate_config(src_template, vpn_data_dict)
+    output_list_2 = conf_dst = generate_config(dst_template, vpn_data_dict)
+    
+    send_config_set(src_device_params, conf_src.split('\n'))
+    send_config_set(dst_device_params, conf_dst.split('\n'))
+    c = ['crypto isakmp policy 10', 'encr aes', 'authentication pre-share', 'group 5', 'hash sha', 'crypto isakmp key cisco address 192.168.100.2', 'crypto ipsec transform-set AESSHA esp-aes esp-sha-hmac', 'mode transport', 'crypto ipsec profile GRE', 'set transform-set AESSHA', 'interface Tunnel 10', 'ip address 10.0.1.1 255.255.255.252', 'tunnel source 192.168.100.1', 'tunnel destination 192.168.100.2', 'tunnel protection ipsec profile GRE']
+       
+
+    return (output_list_1, output_list_2)
+
+
+
+def send_config_set(device, conf_com):
+    try:
+        with ConnectHandler(**device) as ssh:
+            
+            ssh.enable()
+            ssh.config_mode()
+            result = ssh.send_config_set(conf_com)
+            return result 
+    except (NetmikoAuthenticationException, NetmikoTimeoutException) as r:
+        print(r)
+
+
+
+        
+'''        
+# Подключаемся по SSH  чтобы убрать --More--
+def set_tunnel(device, prompt="#"):
+    with pexpect.spawn(f"ssh {device.get('username')}@{device.get('host')}", timeout=10, encoding="utf-8") as ssh:
+        ssh.expect("[Pp]assword")
+        ssh.sendline(device.get('password'))
+        enable_status = ssh.expect([">", "#"])
+        if enable_status == 0:
+            ssh.sendline("enable")
+            ssh.expect("[Pp]assword")
+            ssh.sendline(device.get('secret'))
+            ssh.expect(prompt)
+        
+        ssh.sendline('sh ip int')
+        output = ""
+        
+        while True:
+            match = ssh.expect([prompt, "--More--", pexpect.TIMEOUT])
+            page = ssh.before.replace("\r\n", "\n")
+            page = re.sub(" +\x08+ +\x08+", "\n", page)
+            output += page
+            if match == 0:
+                break
+            elif match == 1:
+                ssh.send(" ")
+            else:
+                print("Ошибка: timeout")
+                
+                break
+        output = re.sub("\n +\n", "\n", output)
+            
+        
+        res = re.finditer(r'.*Tunnel(\S*).*', output)
+        groups =[]
+        for match in res:
+            groups.append(int(match.groups()[0]))
+        
+        return groups 
+        
+'''
+def set_tunnel(device):
+    try:
+        with ConnectHandler(**device) as ssh:
+            ssh.enable()
+            result = ssh.send_command('sh ip int br')
+            #print(result)
+        res = re.finditer(r'.*Tunnel(\S*).*', result)
+        groups =[]
+        for match in res:
+            groups.append(int(match.groups()[0]))
+        
+        return groups 
+    except (NetmikoAuthenticationException, NetmikoTimeoutException) as r:
+        print(r)
+
+
+if __name__ == '__main__':
+    dev = 'devices.yaml'
+    with open(dev) as f1:
+        tem = yaml.safe_load(f1)
+    src_device_params = tem[0]
+    dst_device_params = tem[1]
+    print(configure_vpn(src_device_params, dst_device_params, src_template, dst_template, data))
+    
+    

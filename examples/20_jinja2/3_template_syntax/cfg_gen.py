@@ -12,8 +12,8 @@ vars_file = sys.argv[2]
 
 env = Environment(
     loader=FileSystemLoader(template_dir),
-    trim_blocks=True,
-    lstrip_blocks=True)
+    trim_blocks=False,
+    lstrip_blocks=False)
 template = env.get_template(template_file)
 
 with open(vars_file) as f:
