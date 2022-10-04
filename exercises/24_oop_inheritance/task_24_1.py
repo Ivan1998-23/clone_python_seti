@@ -45,6 +45,7 @@ class CiscoSSH(BaseSSH):
 
 if __name__ == '__main__':
     t = CiscoSSH(**device_params)
+    test = CiscoSSH(**device_params)
     
 
 
