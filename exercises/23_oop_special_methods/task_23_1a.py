@@ -31,3 +31,36 @@ In [12]: print(ip_list)
 [IPAddress('10.1.1.1/24')]
 
 """
+
+class IPAddress:
+    def __init__ (self, ip_masc):
+        ip, masc = ip_masc.split('/')
+        log = False
+        for i in  ip.split('.'):
+            if int(i) > 0 and int(i) <256:
+                log = True
+            else:
+                raise ValueError(f" Incorrect IPv4 address")
+        if int(masc) >8 and int(masc) < 32:
+            pass
+        else:
+            raise ValueError(f" Incorrect  mask")
+        
+        self.ip = ip
+        self.mask = int(masc)   
+
+    def __str__(self):
+        return f"IP address {self.ip}/{self.mask}"
+    def __repr__(self):
+        all_ip_mac = self.ip +'/' + str(self.mask)
+        return f"IPAddress('{all_ip_mac}')"
+
+
+
+if __name__ == '__main__':
+    r1 = IPAddress('10.9.127.121/21')
+    print(r1.mask)
+    print(r1)
+    ip_list = []
+    ip_list.append(r1)
+    print(ip_list)

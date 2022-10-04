@@ -60,16 +60,12 @@ def transform_topology(name_file_yaml):
             for j in list(templet[i]):
                 dict_yaml[(i, j)] = list(templet[i][j].items())[0]
     
-    d = []
+    topology = {}
     for key, val  in dict_yaml.items():
-        for key2, val2  in dict_yaml.items():
-            if (key == val2) and (dict_yaml[key] not in d ):
-                d.append(key)
-    
-    for i in d:
-        dict_yaml.pop(i)
+            if  key != topology.get(val, False):
+                topology[key] = val 
             
-    return dict_yaml
+    return topology
 
 
 if __name__ == '__main__':

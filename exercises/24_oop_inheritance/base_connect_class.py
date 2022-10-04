@@ -4,7 +4,7 @@ import netmiko
 class BaseSSH:
     def __init__(self, **device_params):
         self.ssh = netmiko.ConnectHandler(**device_params)
-
+        
     def send_show_command(self, command):
         return self.ssh.send_command(command)
 

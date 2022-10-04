@@ -16,6 +16,19 @@
 
 """
 from netmiko import ConnectHandler
+import textfsm
+
+
+def parse_command_output(template,command_output):
+    with open(template) as templ:
+        fsm = textfsm.TextFSM(templ)
+        result_inf = fsm.ParseText(command_output)
+    heder = fsm.header
+    result = []
+    result.append(heder)
+    for i in result_inf:
+        result.append(i)
+    return result
 
 # вызов функции должен выглядеть так
 if __name__ == "__main__":
