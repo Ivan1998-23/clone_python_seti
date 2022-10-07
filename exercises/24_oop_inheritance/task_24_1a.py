@@ -26,5 +26,40 @@ In [4]: r1.send_show_command('sh ip int br')
 Out[4]: 'Interface                  IP-Address      OK? Method Status                Protocol\nEthernet0/0                192.168.100.1   YES NVRAM  up                    up      \nEthernet0/1                192.168.200.1   YES NVRAM  up                    up      \nEthernet0/2                190.16.200.1    YES NVRAM  up                    up      \nEthernet0/3                192.168.230.1   YES NVRAM  up                    up      \nEthernet0/3.100            10.100.0.1      YES NVRAM  up                    up      \nEthernet0/3.200            10.200.0.1      YES NVRAM  up                    up      \nEthernet0/3.300            10.30.0.1       YES NVRAM  up                    up      '
 
 """
+from base_connect_class import BaseSSH
+import netmiko
 
-device_params = {"device_type": "cisco_ios", "host": "192.168.100.1"}
+device_params1 = {"device_type": "cisco_ios", "host": "192.168.100.1"}
+
+
+device_params = {
+    "device_type": "cisco_ios",
+    "ip": "192.168.100.1",
+    "username": "cisco",
+    "password": "cisco",
+    "secret": "cisco",
+}
+
+class CiscoSSH(BaseSSH):
+    def __init__(self, **device_params):
+        if device_params.get("username") == None:
+            _in = input('Введите имя пользователя: ')
+            device_params["username"] = _in
+        if device_params.get("password") == None:
+            _in = input('Введите пароль: ')
+            device_params["password"] = _in
+        if device_params.get("secret") == None:
+            _in = input('Введите  пароль для режима enable: ')
+            device_params["secret"] = _in
+        super().__init__(**device_params)
+        self.ssh.enable()
+
+
+
+
+if __name__ == '__main__':
+    t = CiscoSSH(**device_params1) 
+    #print(t.send_show_command('sh ip int br'))
+
+
+

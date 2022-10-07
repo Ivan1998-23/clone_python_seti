@@ -33,20 +33,14 @@ device_params = {
 class CiscoSSH(BaseSSH):
     def __init__(self, **device_params):
         super().__init__(**device_params)
-        print(self.ssh.send_command('enable'))
-        print(self.ssh.send_command(device_params.get("secret")))
-        print(device_params.get("secret"))
-        
-    def errror(self):
-        pass
+        self.ssh.enable()
 
 
 
 
 if __name__ == '__main__':
-    t = CiscoSSH(**device_params)
-    test = CiscoSSH(**device_params)
-    
+    t = CiscoSSH(**device_params) 
+    print(t.send_show_command('sh ip int br'))
 
 
 
