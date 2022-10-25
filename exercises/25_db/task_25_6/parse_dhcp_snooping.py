@@ -1,5 +1,47 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+''' 
+$ python parse_dhcp_snooping.py get -h 
+$ python parse_dhcp_snooping.py add -h    
+$ python parse_dhcp_snooping.py create_db
+        Создаю БД dhcp_snooping.db со схемой dhcp_snooping_schema.sql
+        Создаю базу данных... 
+$ python parse_dhcp_snooping.py add sw[1-3]_dhcp_snooping.txt
+        Читаю информацию из файлов
+        sw1_dhcp_snooping.txt, sw2_dhcp_snooping.txt, sw3_dhcp_snooping.txt
+        Добавляю данные по DHCP записях в dhcp_snooping.db
+$ python parse_dhcp_snooping.py add -s switches.yml
+        Добавляю данные о коммутаторах
+$ python parse_dhcp_snooping.py get
+        В таблице dhcp такие записи:
+        Активные записи:
+        -----------------  ---------------  --  ----------------  ---  -  -------------------
+        00:09:BB:3D:D6:58  10.1.10.2        10  FastEthernet0/1   sw1  1  2019-03-08 16:47:52
+        00:04:A3:3E:5B:69  10.1.5.2          5  FastEthernet0/10  sw1  1  2019-03-08 16:47:52
+        00:05:B3:7E:9B:60  10.1.5.4          5  FastEthernet0/9   sw1  1  2019-03-08 16:47:52
+        00:07:BC:3F:A6:50  10.1.10.6        10  FastEthernet0/3   sw1  1  2019-03-08 16:47:52
+        00:09:BC:3F:A6:50  192.168.100.100   1  FastEthernet0/7   sw1  1  2019-03-08 16:47:52
+        00:A9:BB:3D:D6:58  10.1.10.20       10  FastEthernet0/7   sw2  1  2019-03-08 16:47:52
+        00:B4:A3:3E:5B:69  10.1.5.20         5  FastEthernet0/5   sw2  1  2019-03-08 16:47:52
+        00:C5:B3:7E:9B:60  10.1.5.40         5  FastEthernet0/9   sw2  1  2019-03-08 16:47:52
+        00:A9:BC:3F:A6:50  10.1.10.60       20  FastEthernet0/2   sw2  1  2019-03-08 16:47:52
+        00:E9:BC:3F:A6:50  100.1.1.6         3  FastEthernet0/20  sw3  1  2019-03-08 16:47:52
+        -----------------  ---------------  --  ----------------  ---  -  -------------------
+$ python parse_dhcp_snooping.py get -k vlan -v 10
+        Данные из БД: dhcp_snooping.db
+        Информация об устройствах с такими параметрами: vlan 10
+        Активные записи:
+        -----------------  ----------  --  ---------------  ---  -  -------------------
+        00:09:BB:3D:D6:58  10.1.10.2   10  FastEthernet0/1  sw1  1  2019-03-08 16:47:52
+        00:07:BC:3F:A6:50  10.1.10.6   10  FastEthernet0/3  sw1  1  2019-03-08 16:47:52
+        00:A9:BB:3D:D6:58  10.1.10.20  10  FastEthernet0/7  sw2  1  2019-03-08 16:47:52
+        -----------------  ----------  --  ---------------  ---  -  -------------------
+$ python parse_dhcp_snooping.py get -k vln -v 10
+        usage: parse_dhcp_snooping.py get [-h] [--db DB_FILE]
+                                          [-k {mac,ip,vlan,interface,switch}]
+                                          [-v VALUE] [-a]
+        parse_dhcp_snooping.py get: error: argument -k: invalid choice: 'vln' (choose from 'mac', 'ip', 'vlan', 'interface', 'switch')
+'''
 import argparse
 
 import parse_dhcp_snooping_functions as pds
